@@ -18,6 +18,7 @@ const DEFAULT_FILTERS: FilterState = {
   scoreMax: 1,
   soloAlertas: false,
   busqueda: '',
+  anios: [],
 };
 
 const TITLES: Record<ViewKey, string> = {
@@ -81,6 +82,11 @@ export default function App() {
       )
         return false;
       if (filters.soloAlertas && d.nPipelinesAnomalo < 1) return false;
+      if (
+        filters.anios.length > 0 &&
+        !filters.anios.includes(d.anioProceso)
+      )
+        return false;
       if (
         departamentoSeleccionado &&
         d.departamento !== departamentoSeleccionado

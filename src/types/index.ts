@@ -43,6 +43,8 @@ export interface ContratoIntegrado {
   mlpAnomalia: number;
   probAnomaliaV2: number;
   mlpProbAnomalia: number;
+  anioProceso: number;
+  fechaPublicacion: string;
 }
 
 export interface FilterState {
@@ -52,6 +54,7 @@ export interface FilterState {
   scoreMax: number;
   soloAlertas: boolean;
   busqueda: string;
+  anios: number[];
 }
 
 export interface DepartamentoStats {

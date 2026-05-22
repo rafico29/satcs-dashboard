@@ -79,6 +79,16 @@ export default function Filters({ data, filters, onChange, onReset }: Props) {
     return [...set].sort((a, b) => a.localeCompare(b));
   }, [data]);
 
+  const anios = useMemo(() => {
+    const set = new Set<number>();
+    data.forEach((d) => {
+      if (d.anioProceso && Number.isFinite(d.anioProceso)) {
+        set.add(d.anioProceso);
+      }
+    });
+    return [...set].sort((a, b) => b - a);
+  }, [data]);
+
   const update = <K extends keyof FilterState,>(key: K, value: FilterState[K]) =>
     onChange({ ...filters, [key]: value });
 
@@ -99,19 +109,42 @@ export default function Filters({ data, filters, onChange, onReset }: Props) {
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
-        {/* Periodo (placeholder) */}
+        {/* Periodo (filtro por año) */}
         <div className="flex flex-col gap-2">
           <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-600">
             <CalendarDays className="h-3.5 w-3.5" />
             Periodo
+            {filters.anios.length > 0 && (
+              <span className="ml-1 rounded-full bg-accent/10 px-2 py-0.5 text-[10px] font-bold text-accent">
+                {filters.anios.length}
+              </span>
+            )}
           </label>
-          <select
-            disabled
-            className="cursor-not-allowed rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-400"
-            title="Próximamente: filtro temporal"
-          >
-            <option>Todo el rango (placeholder)</option>
-          </select>
+          <div className="scroll-thin max-h-40 overflow-y-auto rounded-md border border-slate-200 bg-white p-2">
+            {anios.length === 0 ? (
+              <p className="text-xs text-slate-400">Sin años disponibles</p>
+            ) : (
+              anios.map((year) => (
+                <label
+                  key={year}
+                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-sm hover:bg-slate-50"
+                >
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-slate-300 text-accent focus:ring-accent"
+                    checked={filters.anios.includes(year)}
+                    onChange={() => {
+                      const next = filters.anios.includes(year)
+                        ? filters.anios.filter((y) => y !== year)
+                        : [...filters.anios, year];
+                      update('anios', next);
+                    }}
+                  />
+                  <span>{year}</span>
+                </label>
+              ))
+            )}
+          </div>
         </div>
 
         <MultiSelect
