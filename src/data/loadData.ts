@@ -90,6 +90,8 @@ export async function loadIntegrado(): Promise<ContratoIntegrado[]> {
       mlpAnomalia: toNumber(r['mlp_anomalia']),
       probAnomaliaV2: toNumber(r['prob_anomalia_v2']),
       mlpProbAnomalia: toNumber(r['mlp_prob_anomalia']),
+      svmRbfProb: toNumber(r['svm_rbf_prob']),
+      svmRbfAnomalia: toNumber(r['svm_rbf_anomalia']),
       anioProceso: toNumber(r['ANIO_PROCESO']),
       fechaPublicacion: toString(r['fecha_publicacion']),
     }));

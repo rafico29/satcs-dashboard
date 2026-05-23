@@ -92,6 +92,11 @@ export default function ExplanationPanel({ contrato, baseline, onClose }: Props)
       detectado: contrato.anomaliaV2 === 1,
       score: contrato.probAnomaliaV2,
     },
+    {
+      nombre: 'SVM RBF (kernel gaussiano)',
+      detectado: contrato.svmRbfAnomalia === 1,
+      score: contrato.svmRbfProb,
+    },
   ];
 
   const detectados = modelos.filter((m) => m.detectado).length;

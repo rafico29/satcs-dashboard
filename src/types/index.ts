@@ -43,6 +43,8 @@ export interface ContratoIntegrado {
   mlpAnomalia: number;
   probAnomaliaV2: number;
   mlpProbAnomalia: number;
+  svmRbfProb: number;
+  svmRbfAnomalia: number;
   anioProceso: number;
   fechaPublicacion: string;
 }
