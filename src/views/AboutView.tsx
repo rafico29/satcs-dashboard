@@ -98,9 +98,9 @@ const PIPELINE_STEPS = [
 
 const METRICS = [
   { label: 'F1 (MLP)', value: '0.815', color: 'text-accent', sub: 'Red Neuronal' },
-  { label: 'AUC (MLP)', value: '0.996', color: 'text-emerald-600', sub: 'Casi perfecto' },
-  { label: 'Recall (SVM RBF)', value: '100%', color: 'text-amber-600', sub: 'Captura todas' },
-  { label: 'Modelos', value: '6', color: 'text-rose-600', sub: 'Multimodelo' },
+  { label: 'AUC (MLP)', value: '0.996', color: 'text-emerald-600', sub: 'Validado en CV' },
+  { label: 'Recall (SVM RBF)', value: '85.5%', color: 'text-amber-600', sub: 'Pipeline GMM→SVM→LR' },
+  { label: 'Modelos', value: '6', color: 'text-rose-600', sub: 'Multimodelo ponderado' },
 ];
 
 interface TeamMember {
