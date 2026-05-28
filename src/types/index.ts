@@ -37,14 +37,20 @@ export interface ContratoIntegrado {
   scoreCompuesto: number;
   nPipelinesAnomalo: number;
   labelConsenso: number;
+  // Detectores binarios
+  kmeansAnomalia: number; // es_anomalia
   iforestAnomalia: number;
-  anomaliaV2: number;
+  gmmAnomalia: number; // derivado de log_prob
   lofAnomalia: number;
   mlpAnomalia: number;
-  probAnomaliaV2: number;
+  svmRbfAnomalia: number;
+  anomaliaV2: number;
+  // Probabilidades / scores continuos
   mlpProbAnomalia: number;
   svmRbfProb: number;
-  svmRbfAnomalia: number;
+  probAnomaliaV2: number;
+  logProb: number;
+  // Metadatos
   anioProceso: number;
   fechaPublicacion: string;
 }

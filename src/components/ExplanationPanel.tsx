@@ -75,6 +75,15 @@ export default function ExplanationPanel({ contrato, baseline, onClose }: Props)
 
   const modelos: ModeloRow[] = [
     {
+      nombre: 'K-Means (clustering)',
+      detectado: contrato.kmeansAnomalia === 1,
+    },
+    {
+      nombre: 'GMM (Mixturas Gaussianas)',
+      detectado: contrato.gmmAnomalia === 1,
+      score: contrato.logProb,
+    },
+    {
       nombre: 'Isolation Forest',
       detectado: contrato.iforestAnomalia === 1,
     },
@@ -88,11 +97,6 @@ export default function ExplanationPanel({ contrato, baseline, onClose }: Props)
       score: contrato.mlpProbAnomalia,
     },
     {
-      nombre: 'Modelo V2 (consenso)',
-      detectado: contrato.anomaliaV2 === 1,
-      score: contrato.probAnomaliaV2,
-    },
-    {
       nombre: 'SVM RBF (kernel gaussiano)',
       detectado: contrato.svmRbfAnomalia === 1,
       score: contrato.svmRbfProb,
@@ -100,23 +104,27 @@ export default function ExplanationPanel({ contrato, baseline, onClose }: Props)
   ];
 
   const detectados = modelos.filter((m) => m.detectado).length;
+  const totalModelos = modelos.length;
 
   let recomendacion = '';
-  if (contrato.scoreCompuesto > 0.7 || detectados >= 3) {
+  if (contrato.scoreCompuesto > 0.5 || detectados >= 4) {
     recomendacion =
       'Auditoria PRIORITARIA. Se recomienda revisar de inmediato la documentacion del proceso, los soportes del valor adjudicado y la trayectoria del proveedor. Considere abrir investigacion preliminar.';
-  } else if (contrato.scoreCompuesto > 0.4 || detectados >= 1) {
+  } else if (contrato.scoreCompuesto > 0.3 || detectados >= 2) {
     recomendacion =
       'Revisar como caso de seguimiento. Las anomalias detectadas justifican una verificacion documental y entrevista al supervisor del contrato.';
+  } else if (detectados >= 1) {
+    recomendacion =
+      'Caso atipico marcado por al menos un modelo. Mantener en monitoreo con prioridad media.';
   } else {
     recomendacion =
       'Sin senales relevantes de riesgo. Mantener en monitoreo rutinario.';
   }
 
   const scoreStatus: 'critical' | 'warning' | 'ok' =
-    contrato.scoreCompuesto > 0.7
+    contrato.scoreCompuesto > 0.5
       ? 'critical'
-      : contrato.scoreCompuesto > 0.4
+      : contrato.scoreCompuesto > 0.3
         ? 'warning'
         : 'ok';
 
@@ -172,7 +180,7 @@ export default function ExplanationPanel({ contrato, baseline, onClose }: Props)
               </p>
               <p className="text-2xl font-bold text-slate-900">
                 {detectados}
-                <span className="text-base text-slate-400"> / 4</span>
+                <span className="text-base text-slate-400"> / {totalModelos}</span>
               </p>
             </div>
           </div>
@@ -228,7 +236,15 @@ export default function ExplanationPanel({ contrato, baseline, onClose }: Props)
               Factores que generan la alerta
             </h4>
             <div className="space-y-2">
-              {modelos.map((m) => (
+              {modelos.map((m) => {
+                // Para el GMM, m.score es la log-probabilidad (negativa, menor = más anómalo)
+                const isGmm = m.nombre.startsWith('GMM');
+                const showScore = typeof m.score === 'number' &&
+                  (isGmm ? Math.abs(m.score) > 0 : m.score > 0);
+                const scoreLabel = isGmm
+                  ? `log-prob: ${m.score!.toFixed(2)}`
+                  : `prob: ${(m.score ?? 0).toFixed(3)}`;
+                return (
                 <div
                   key={m.nombre}
                   className={`flex items-center justify-between rounded-md border px-3 py-2 text-sm ${
@@ -242,9 +258,9 @@ export default function ExplanationPanel({ contrato, baseline, onClose }: Props)
                     <span className="font-medium text-slate-700">{m.nombre}</span>
                   </div>
                   <div className="text-right">
-                    {typeof m.score === 'number' && m.score > 0 ? (
+                    {showScore ? (
                       <span className="font-mono text-xs text-slate-600">
-                        prob: {m.score.toFixed(3)}
+                        {scoreLabel}
                       </span>
                     ) : (
                       <span className="text-xs text-slate-400">
@@ -253,7 +269,7 @@ export default function ExplanationPanel({ contrato, baseline, onClose }: Props)
                     )}
                   </div>
                 </div>
-              ))}
+              );})}
             </div>
           </section>
 

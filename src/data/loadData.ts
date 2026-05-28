@@ -84,14 +84,20 @@ export async function loadIntegrado(): Promise<ContratoIntegrado[]> {
       scoreCompuesto: toNumber(r['score_compuesto']),
       nPipelinesAnomalo: toNumber(r['n_pipelines_anomalo']),
       labelConsenso: toNumber(r['label_consenso']),
+      // Detectores binarios
+      kmeansAnomalia: toNumber(r['es_anomalia']),
       iforestAnomalia: toNumber(r['iforest_anomalia']),
-      anomaliaV2: toNumber(r['anomalia_v2']),
+      gmmAnomalia: toNumber(r['gmm_anomalia']),
       lofAnomalia: toNumber(r['lof_anomalia']),
       mlpAnomalia: toNumber(r['mlp_anomalia']),
-      probAnomaliaV2: toNumber(r['prob_anomalia_v2']),
+      svmRbfAnomalia: toNumber(r['svm_rbf_anomalia']),
+      anomaliaV2: toNumber(r['anomalia_v2']),
+      // Probabilidades
       mlpProbAnomalia: toNumber(r['mlp_prob_anomalia']),
       svmRbfProb: toNumber(r['svm_rbf_prob']),
-      svmRbfAnomalia: toNumber(r['svm_rbf_anomalia']),
+      probAnomaliaV2: toNumber(r['prob_anomalia_v2']),
+      logProb: toNumber(r['log_prob']),
+      // Metadatos
       anioProceso: toNumber(r['ANIO_PROCESO']),
       fechaPublicacion: toString(r['fecha_publicacion']),
     }));
