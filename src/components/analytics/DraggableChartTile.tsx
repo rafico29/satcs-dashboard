@@ -42,20 +42,23 @@ export default function DraggableChartTile({
   return (
     <div
       ref={tileRef}
-      className="relative flex h-full w-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-card"
+      className="relative flex h-full w-full flex-col overflow-hidden rounded-xl bg-white shadow-card"
     >
-      {/* Toolbar superior con drag handle y menú */}
-      <div className="flex items-center justify-between border-b border-slate-100 px-3 py-1.5">
-        <div className="drag-handle flex h-7 w-7 cursor-move items-center justify-center text-slate-400 hover:text-slate-700">
-          <GripVertical className="h-4 w-4" />
+      {/* Toolbar superior compacta con drag handle y menú */}
+      <div className="absolute right-1.5 top-1.5 z-10 flex items-center gap-1">
+        <div
+          className="drag-handle flex h-6 w-6 cursor-move items-center justify-center rounded-md bg-white/80 text-slate-400 backdrop-blur hover:bg-slate-100 hover:text-slate-700"
+          title="Arrastrar"
+        >
+          <GripVertical className="h-3.5 w-3.5" />
         </div>
         <div className="relative">
           <button
             onClick={() => setMenuOpen((v) => !v)}
-            className="rounded-md p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+            className="flex h-6 w-6 items-center justify-center rounded-md bg-white/80 text-slate-500 backdrop-blur hover:bg-slate-100 hover:text-slate-900"
             aria-label="Opciones"
           >
-            <MoreVertical className="h-4 w-4" />
+            <MoreVertical className="h-3.5 w-3.5" />
           </button>
           {menuOpen && (
             <>
@@ -100,7 +103,7 @@ export default function DraggableChartTile({
         </div>
       </div>
 
-      {/* Contenido del chart */}
+      {/* Contenido del chart - ocupa todo el espacio del tile */}
       <div className="min-h-0 flex-1 overflow-hidden">
         <Comp data={data} />
       </div>

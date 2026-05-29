@@ -17,17 +17,17 @@ export default function ChartCard({
 }: Props) {
   return (
     <section
-      className={`flex h-full flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-card ${
+      className={`flex h-full flex-col rounded-xl border border-slate-200 bg-white p-3 shadow-card ${
         className ?? ''
       }`}
     >
-      <div className="mb-3 flex items-start justify-between gap-3">
+      <div className="mb-2 flex items-start justify-between gap-3">
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-700">
             {title}
           </h3>
           {subtitle && (
-            <p className="mt-1 text-xs text-slate-500">{subtitle}</p>
+            <p className="mt-0.5 text-[11px] text-slate-500">{subtitle}</p>
           )}
         </div>
         {action}

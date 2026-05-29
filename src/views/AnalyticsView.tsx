@@ -28,9 +28,9 @@ interface Props {
   data: ContratoIntegrado[];
 }
 
-const STORAGE_KEY_LAYOUT = 'satcs-analytics-layout-v4';
-const STORAGE_KEY_VISIBLE = 'satcs-analytics-visible-v4';
-const STORAGE_KEY_FILTERS = 'satcs-analytics-filters-v4';
+const STORAGE_KEY_LAYOUT = 'satcs-analytics-layout-v5';
+const STORAGE_KEY_VISIBLE = 'satcs-analytics-visible-v5';
+const STORAGE_KEY_FILTERS = 'satcs-analytics-filters-v5';
 
 const ALL_IDS = CHART_DEFINITIONS.map((c) => c.id);
 

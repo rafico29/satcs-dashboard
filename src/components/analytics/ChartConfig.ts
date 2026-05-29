@@ -39,7 +39,7 @@ export interface ChartDefinition {
 
 // w: en columnas (12 cols totales). h: filas de 30px aprox.
 // Las alturas se ajustan al tipo de gráfico para mantener proporciones razonables.
-// Objetivo: tiles más anchos que altos (proporción 16:9 a 2:1).
+// Objetivo: tiles claramente más anchos que altos (proporción 16:8 a 16:6).
 export const CHART_DEFINITIONS: ChartDefinition[] = [
   {
     id: 'score-by-dept',
@@ -47,9 +47,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     description: 'Riesgo medio por territorio',
     component: ScoreByDeptChart,
     defaultW: 6,
-    defaultH: 9,
+    defaultH: 7,
     minW: 4,
-    minH: 6,
+    minH: 5,
   },
   {
     id: 'contract-type',
@@ -57,9 +57,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     description: 'Distribución de alertas por tipología',
     component: ContractTypeChart,
     defaultW: 6,
-    defaultH: 8,
+    defaultH: 6,
     minW: 4,
-    minH: 6,
+    minH: 5,
   },
   {
     id: 'price-vs-duration',
@@ -67,9 +67,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     description: 'Dispersión y outliers operativos',
     component: PriceVsDurationScatter,
     defaultW: 6,
-    defaultH: 8,
+    defaultH: 6,
     minW: 4,
-    minH: 6,
+    minH: 5,
   },
   {
     id: 'timeline',
@@ -77,9 +77,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     description: 'Evolución mensual de alertas',
     component: TimelineChart,
     defaultW: 6,
-    defaultH: 7,
+    defaultH: 6,
     minW: 4,
-    minH: 6,
+    minH: 5,
   },
   {
     id: 'model-agreement',
@@ -87,9 +87,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     description: 'Coincidencias entre los detectores',
     component: ModelAgreementChart,
     defaultW: 6,
-    defaultH: 7,
+    defaultH: 6,
     minW: 4,
-    minH: 6,
+    minH: 5,
   },
   {
     id: 'risk-vs-transparency',
@@ -97,9 +97,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     description: 'Departamentos por nivel de transparencia',
     component: RiskByTransparencyChart,
     defaultW: 6,
-    defaultH: 8,
+    defaultH: 6,
     minW: 4,
-    minH: 6,
+    minH: 5,
   },
   {
     id: 'top-entidades',
@@ -107,9 +107,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     description: 'Entidades con más alertas',
     component: TopEntidadesChart,
     defaultW: 6,
-    defaultH: 9,
+    defaultH: 7,
     minW: 4,
-    minH: 6,
+    minH: 5,
   },
   {
     id: 'top-proveedores',
@@ -117,9 +117,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     description: 'Proveedores con más alertas',
     component: TopProveedoresChart,
     defaultW: 6,
-    defaultH: 9,
+    defaultH: 7,
     minW: 4,
-    minH: 6,
+    minH: 5,
   },
 ];
 
