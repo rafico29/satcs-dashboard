@@ -30,6 +30,7 @@ interface UploadState {
   format: DetectedFormat;
   inputs: PredictionInput[];
   skipped: number;
+  desviacionCalculada: boolean;
 }
 
 function formatCOP(v: number): string {
@@ -79,14 +80,14 @@ export default function PredictView() {
           return;
         }
         const format = detectFormat(rows);
-        const { inputs, skipped } = rowsToPredictionInputs(rows);
+        const { inputs, skipped, desviacionCalculada } = rowsToPredictionInputs(rows);
         if (inputs.length === 0) {
           setError(
             'No se pudo extraer ningún registro válido del CSV. Verifica que tenga columnas de precio y duración.',
           );
           return;
         }
-        setUpload({ fileName: file.name, rows, format, inputs, skipped });
+        setUpload({ fileName: file.name, rows, format, inputs, skipped, desviacionCalculada });
       },
       error: (err) => setError(`Error al leer el archivo: ${err.message}`),
     });
@@ -294,24 +295,30 @@ export default function PredictView() {
               <div className="flex-1">
                 <p className="text-sm font-semibold text-slate-900">
                   {upload.format.type === 'prepared' &&
-                    'Formato detectado: CSV preparado'}
+                    'CSV reconocido (formato preparado)'}
                   {upload.format.type === 'raw_secop' &&
-                    'Formato detectado: CSV crudo del SECOP'}
+                    'CSV reconocido (formato SECOP)'}
                   {upload.format.type === 'unknown' &&
-                    'Formato no estándar detectado'}
+                    'CSV con formato no estándar'}
                 </p>
                 <p className="mt-1 text-xs text-slate-600">
                   {upload.format.type === 'prepared' &&
-                    'El CSV ya tiene las columnas precalculadas. Listo para inferencia.'}
+                    'Las columnas precalculadas están presentes. Listo para inferencia.'}
                   {upload.format.type === 'raw_secop' &&
-                    'Se aplicará la limpieza automática: cálculo de precio_por_dia y normalización.'}
+                    'Se aplicará la limpieza automática (cálculo de precio/día y desviación contextual).'}
                   {upload.format.type === 'unknown' &&
-                    'No se reconocen las columnas del SECOP, pero igual se procesarán las filas con precio y duración válidos. El resultado puede ser menos preciso si falta la desviación contextual.'}
+                    'No se reconocen las columnas estándar, pero se procesarán las filas con valor y duración válidos.'}
                 </p>
+                {upload.desviacionCalculada && (
+                  <p className="mt-2 text-xs text-emerald-700">
+                    ✓ Desviación contextual calculada automáticamente con la
+                    mediana de cada departamento × tipo de contrato del CSV.
+                  </p>
+                )}
                 {upload.skipped > 0 && (
                   <p className="mt-2 text-xs text-amber-700">
                     Se omitieron {upload.skipped} filas con datos inválidos
-                    (precio o duración faltantes/cero).
+                    (valor o duración faltantes/cero).
                   </p>
                 )}
               </div>
