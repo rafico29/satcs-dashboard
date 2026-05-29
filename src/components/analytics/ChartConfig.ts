@@ -37,112 +37,108 @@ export interface ChartDefinition {
   minH?: number;
 }
 
-// w: en columnas (12 cols totales). h: filas de 30px aprox.
-// Las alturas se ajustan al tipo de gráfico para mantener proporciones razonables.
-// Objetivo: tiles claramente más anchos que altos (proporción 16:8 a 16:6).
+// w: en columnas (12 cols totales). h: filas de 32px aprox.
+// Tiles compactos: el grid usa 3 columnas por defecto (4 cols cada uno = 12 totales).
+// Altura 5 filas → ~160px. Esto deja ver 6 charts en una pantalla 1080p.
 export const CHART_DEFINITIONS: ChartDefinition[] = [
   {
     id: 'score-by-dept',
     title: 'Score por departamento',
     description: 'Riesgo medio por territorio',
     component: ScoreByDeptChart,
-    defaultW: 6,
-    defaultH: 7,
-    minW: 4,
-    minH: 5,
+    defaultW: 4,
+    defaultH: 5,
+    minW: 3,
+    minH: 4,
   },
   {
     id: 'contract-type',
     title: 'Tipos de contrato',
     description: 'Distribución de alertas por tipología',
     component: ContractTypeChart,
-    defaultW: 6,
-    defaultH: 6,
-    minW: 4,
-    minH: 5,
+    defaultW: 4,
+    defaultH: 5,
+    minW: 3,
+    minH: 4,
   },
   {
     id: 'price-vs-duration',
     title: 'Precio vs duración',
     description: 'Dispersión y outliers operativos',
     component: PriceVsDurationScatter,
-    defaultW: 6,
-    defaultH: 6,
-    minW: 4,
-    minH: 5,
+    defaultW: 4,
+    defaultH: 5,
+    minW: 3,
+    minH: 4,
   },
   {
     id: 'timeline',
     title: 'Línea de tiempo',
     description: 'Evolución mensual de alertas',
     component: TimelineChart,
-    defaultW: 6,
-    defaultH: 6,
-    minW: 4,
-    minH: 5,
+    defaultW: 4,
+    defaultH: 5,
+    minW: 3,
+    minH: 4,
   },
   {
     id: 'model-agreement',
     title: 'Acuerdo entre modelos',
     description: 'Coincidencias entre los detectores',
     component: ModelAgreementChart,
-    defaultW: 6,
-    defaultH: 6,
-    minW: 4,
-    minH: 5,
+    defaultW: 4,
+    defaultH: 5,
+    minW: 3,
+    minH: 4,
   },
   {
     id: 'risk-vs-transparency',
     title: 'Riesgo vs transparencia',
     description: 'Departamentos por nivel de transparencia',
     component: RiskByTransparencyChart,
-    defaultW: 6,
-    defaultH: 6,
-    minW: 4,
-    minH: 5,
+    defaultW: 4,
+    defaultH: 5,
+    minW: 3,
+    minH: 4,
   },
   {
     id: 'top-entidades',
     title: 'Top entidades',
     description: 'Entidades con más alertas',
     component: TopEntidadesChart,
-    defaultW: 6,
-    defaultH: 7,
-    minW: 4,
-    minH: 5,
+    defaultW: 4,
+    defaultH: 5,
+    minW: 3,
+    minH: 4,
   },
   {
     id: 'top-proveedores',
     title: 'Top proveedores',
     description: 'Proveedores con más alertas',
     component: TopProveedoresChart,
-    defaultW: 6,
-    defaultH: 7,
-    minW: 4,
-    minH: 5,
+    defaultW: 4,
+    defaultH: 5,
+    minW: 3,
+    minH: 4,
   },
 ];
 
 export function buildDefaultLayout(visibleIds: string[]): LayoutItem[] {
+  // Layout en grilla de 3 columnas (4 unidades cada una en grid de 12)
+  const COLS_PER_ROW = 3;
+  const ITEM_W = 4;
   return visibleIds.map((id, idx): LayoutItem => {
     const def = CHART_DEFINITIONS.find((c) => c.id === id);
-    if (!def) {
-      return {
-        i: id,
-        x: (idx % 2) * 6,
-        y: Math.floor(idx / 2) * 16,
-        w: 6,
-        h: 16,
-      };
-    }
+    const w = def?.defaultW ?? ITEM_W;
+    const h = def?.defaultH ?? 5;
     return {
       i: id,
-      x: (idx % 2) * def.defaultW,
-      y: Math.floor(idx / 2) * def.defaultH,
-      w: def.defaultW,
-      h: def.defaultH,
-      minW: def.minW,
-      minH: def.minH,
+      x: (idx % COLS_PER_ROW) * w,
+      y: Math.floor(idx / COLS_PER_ROW) * h,
+      w,
+      h,
+      minW: def?.minW,
+      minH: def?.minH,
     };
   });
 }

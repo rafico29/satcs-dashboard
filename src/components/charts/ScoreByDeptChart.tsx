@@ -43,14 +43,14 @@ export default function ScoreByDeptChart({ data }: Props) {
         contratos: v.total,
       }))
       .sort((a, b) => b.scoreMedio - a.scoreMedio)
-      .slice(0, 15)
+      .slice(0, 10)
       .reverse();
   }, [data]);
 
   return (
     <ChartCard
       title="Score promedio por departamento"
-      subtitle="Top 15 departamentos con mayor riesgo medio (mín. 3 contratos)"
+      subtitle="Top 10 departamentos con mayor riesgo medio (mín. 3 contratos)"
     >
       <div className="h-full w-full">
         {top.length === 0 ? (
