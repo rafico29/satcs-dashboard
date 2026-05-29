@@ -45,12 +45,9 @@ export default function DraggableChartTile({
       className="relative flex h-full w-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-card"
     >
       {/* Toolbar superior con drag handle y menú */}
-      <div className="flex items-center justify-between border-b border-slate-100 px-3 py-2">
-        <div className="drag-handle flex cursor-move items-center gap-2 text-slate-400 hover:text-slate-700">
+      <div className="flex items-center justify-between border-b border-slate-100 px-3 py-1.5">
+        <div className="drag-handle flex h-7 w-7 cursor-move items-center justify-center text-slate-400 hover:text-slate-700">
           <GripVertical className="h-4 w-4" />
-          <span className="text-[11px] font-semibold uppercase tracking-widest">
-            arrastrar
-          </span>
         </div>
         <div className="relative">
           <button
@@ -104,7 +101,7 @@ export default function DraggableChartTile({
       </div>
 
       {/* Contenido del chart */}
-      <div className="min-h-0 flex-1 overflow-auto p-3">
+      <div className="min-h-0 flex-1 overflow-hidden">
         <Comp data={data} />
       </div>
     </div>

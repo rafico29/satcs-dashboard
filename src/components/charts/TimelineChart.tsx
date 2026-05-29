@@ -63,7 +63,7 @@ export default function TimelineChart({ data }: Props) {
       title="Línea temporal de alertas"
       subtitle="Distribución por mes (simulación a partir del ID de proceso)"
     >
-      <div className="h-[320px] w-full">
+      <div className="h-full min-h-[260px] w-full">
         {total === 0 ? (
           <EmptyChart />
         ) : (

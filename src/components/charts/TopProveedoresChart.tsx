@@ -44,7 +44,7 @@ export default function TopProveedoresChart({ data }: Props) {
       title="Proveedores con más alertas"
       subtitle="Top 10 proveedores adjudicados con mayor número de alertas"
     >
-      <div className="h-[420px] w-full">
+      <div className="h-full min-h-[300px] w-full">
         {top.length === 0 ? (
           <EmptyChart />
         ) : (

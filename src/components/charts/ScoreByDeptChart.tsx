@@ -52,7 +52,7 @@ export default function ScoreByDeptChart({ data }: Props) {
       title="Score promedio por departamento"
       subtitle="Top 15 departamentos con mayor riesgo medio (mín. 3 contratos)"
     >
-      <div className="h-[420px] w-full">
+      <div className="h-full min-h-[300px] w-full">
         {top.length === 0 ? (
           <EmptyChart />
         ) : (

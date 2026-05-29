@@ -41,7 +41,7 @@ export default function TopEntidadesChart({ data }: Props) {
       title="Entidades con más alertas"
       subtitle="Top 10 entidades contratantes con mayor número de alertas"
     >
-      <div className="h-[420px] w-full">
+      <div className="h-full min-h-[300px] w-full">
         {top.length === 0 ? (
           <EmptyChart />
         ) : (

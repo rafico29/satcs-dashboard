@@ -49,7 +49,7 @@ export default function ContractTypeChart({ data }: Props) {
       title="Tipos de contrato en alerta"
       subtitle="Proporción de alertas por modalidad contractual"
     >
-      <div className="h-[420px] w-full">
+      <div className="h-full min-h-[300px] w-full">
         {total === 0 ? (
           <EmptyChart />
         ) : (
