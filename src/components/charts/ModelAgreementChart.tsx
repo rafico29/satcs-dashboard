@@ -54,7 +54,7 @@ export default function ModelAgreementChart({ data }: Props) {
       title="Consenso entre modelos"
       subtitle="Cuántos pipelines marcaron como anómalo cada contrato"
     >
-      <div className="h-full min-h-[260px] w-full">
+      <div className="h-full w-full">
         {total === 0 ? (
           <EmptyChart />
         ) : (

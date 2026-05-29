@@ -54,7 +54,7 @@ export default function RiskByTransparencyChart({ data }: Props) {
       title="Score por nivel de transparencia"
       subtitle="Score medio según el indicador de transparencia del territorio"
     >
-      <div className="h-full min-h-[260px] w-full">
+      <div className="h-full w-full">
         {!hasData ? (
           <EmptyChart />
         ) : (

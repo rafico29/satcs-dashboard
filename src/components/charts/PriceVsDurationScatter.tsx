@@ -76,7 +76,7 @@ export default function PriceVsDurationScatter({ data }: Props) {
         )
       }
     >
-      <div className="h-full min-h-[280px] w-full">
+      <div className="h-full w-full">
         {points.length === 0 ? (
           <EmptyChart />
         ) : (
