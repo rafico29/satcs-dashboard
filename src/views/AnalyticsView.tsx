@@ -28,9 +28,9 @@ interface Props {
   data: ContratoIntegrado[];
 }
 
-const STORAGE_KEY_LAYOUT = 'satcs-analytics-layout-v3';
-const STORAGE_KEY_VISIBLE = 'satcs-analytics-visible-v3';
-const STORAGE_KEY_FILTERS = 'satcs-analytics-filters-v3';
+const STORAGE_KEY_LAYOUT = 'satcs-analytics-layout-v4';
+const STORAGE_KEY_VISIBLE = 'satcs-analytics-visible-v4';
+const STORAGE_KEY_FILTERS = 'satcs-analytics-filters-v4';
 
 const ALL_IDS = CHART_DEFINITIONS.map((c) => c.id);
 
@@ -358,7 +358,7 @@ export default function AnalyticsView({ data }: Props) {
               className: 'layout',
               layout: layout.filter((l) => visibleIds.includes(l.i)),
               cols: 12,
-              rowHeight: 36,
+              rowHeight: 32,
               width: containerWidth,
               margin: [16, 16],
               draggableHandle: '.drag-handle',
