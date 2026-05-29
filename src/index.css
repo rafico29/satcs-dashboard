@@ -42,3 +42,55 @@ body {
 .scroll-thin::-webkit-scrollbar-track {
   background: transparent;
 }
+
+/* React Grid Layout - estilos mínimos personalizados */
+.react-grid-layout {
+  position: relative;
+  transition: height 200ms ease;
+}
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top, width, height;
+}
+.react-grid-item.cssTransforms {
+  transition-property: transform, width, height;
+}
+.react-grid-item.resizing {
+  z-index: 1;
+  will-change: width, height;
+  opacity: 0.95;
+}
+.react-grid-item.react-draggable-dragging {
+  transition: none;
+  z-index: 3;
+  will-change: transform;
+  opacity: 0.95;
+  cursor: grabbing;
+}
+.react-grid-item.react-grid-placeholder {
+  background: rgb(59 130 246 / 0.15);
+  border: 2px dashed rgb(59 130 246 / 0.4);
+  border-radius: 12px;
+  opacity: 1;
+  transition-duration: 100ms;
+  z-index: 2;
+}
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  bottom: 4px;
+  right: 4px;
+  cursor: se-resize;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 6 6' style='background-color:%23ffffff00' x='0' y='0' fill='%23475569'%3E%3Cpath d='M6 6H0V4.2H4.2V0H6v6z'/%3E%3C/svg%3E");
+  background-position: bottom right;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  padding: 0 2px 2px 0;
+  background-size: 14px;
+}
+.react-grid-item > .react-resizable-handle:hover {
+  opacity: 0.9;
+}
