@@ -38,17 +38,17 @@ export interface ChartDefinition {
 }
 
 // w: en columnas (12 cols totales). h: filas de 32px aprox.
-// Tiles compactos: el grid usa 3 columnas por defecto (4 cols cada uno = 12 totales).
-// Altura 5 filas → ~160px. Esto deja ver 6 charts en una pantalla 1080p.
+// Layout default: 2 columnas (6 unidades cada una). Altura compacta para que
+// los gráficos de barras no se vean alargados.
 export const CHART_DEFINITIONS: ChartDefinition[] = [
   {
     id: 'score-by-dept',
     title: 'Score por departamento',
     description: 'Riesgo medio por territorio',
     component: ScoreByDeptChart,
-    defaultW: 4,
-    defaultH: 5,
-    minW: 3,
+    defaultW: 6,
+    defaultH: 6,
+    minW: 4,
     minH: 4,
   },
   {
@@ -56,9 +56,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     title: 'Tipos de contrato',
     description: 'Distribución de alertas por tipología',
     component: ContractTypeChart,
-    defaultW: 4,
-    defaultH: 5,
-    minW: 3,
+    defaultW: 6,
+    defaultH: 6,
+    minW: 4,
     minH: 4,
   },
   {
@@ -66,9 +66,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     title: 'Precio vs duración',
     description: 'Dispersión y outliers operativos',
     component: PriceVsDurationScatter,
-    defaultW: 4,
-    defaultH: 5,
-    minW: 3,
+    defaultW: 6,
+    defaultH: 6,
+    minW: 4,
     minH: 4,
   },
   {
@@ -76,9 +76,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     title: 'Línea de tiempo',
     description: 'Evolución mensual de alertas',
     component: TimelineChart,
-    defaultW: 4,
-    defaultH: 5,
-    minW: 3,
+    defaultW: 6,
+    defaultH: 6,
+    minW: 4,
     minH: 4,
   },
   {
@@ -86,9 +86,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     title: 'Acuerdo entre modelos',
     description: 'Coincidencias entre los detectores',
     component: ModelAgreementChart,
-    defaultW: 4,
-    defaultH: 5,
-    minW: 3,
+    defaultW: 6,
+    defaultH: 6,
+    minW: 4,
     minH: 4,
   },
   {
@@ -96,9 +96,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     title: 'Riesgo vs transparencia',
     description: 'Departamentos por nivel de transparencia',
     component: RiskByTransparencyChart,
-    defaultW: 4,
-    defaultH: 5,
-    minW: 3,
+    defaultW: 6,
+    defaultH: 6,
+    minW: 4,
     minH: 4,
   },
   {
@@ -106,9 +106,9 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     title: 'Top entidades',
     description: 'Entidades con más alertas',
     component: TopEntidadesChart,
-    defaultW: 4,
-    defaultH: 5,
-    minW: 3,
+    defaultW: 6,
+    defaultH: 6,
+    minW: 4,
     minH: 4,
   },
   {
@@ -116,21 +116,21 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
     title: 'Top proveedores',
     description: 'Proveedores con más alertas',
     component: TopProveedoresChart,
-    defaultW: 4,
-    defaultH: 5,
-    minW: 3,
+    defaultW: 6,
+    defaultH: 6,
+    minW: 4,
     minH: 4,
   },
 ];
 
 export function buildDefaultLayout(visibleIds: string[]): LayoutItem[] {
-  // Layout en grilla de 3 columnas (4 unidades cada una en grid de 12)
-  const COLS_PER_ROW = 3;
-  const ITEM_W = 4;
+  // Layout en grilla de 2 columnas (6 unidades cada una en grid de 12)
+  const COLS_PER_ROW = 2;
+  const ITEM_W = 6;
   return visibleIds.map((id, idx): LayoutItem => {
     const def = CHART_DEFINITIONS.find((c) => c.id === id);
     const w = def?.defaultW ?? ITEM_W;
-    const h = def?.defaultH ?? 5;
+    const h = def?.defaultH ?? 6;
     return {
       i: id,
       x: (idx % COLS_PER_ROW) * w,
