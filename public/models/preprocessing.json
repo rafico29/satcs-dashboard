@@ -1,0 +1,61 @@
+{
+  "version": "1.0",
+  "created_at": "2026-05-28T21:56:42.275631",
+  "features": [
+    "duracion_dias",
+    "precio_por_dia_log",
+    "desviacion_precio_contextual_log"
+  ],
+  "feature_count": 3,
+  "preprocessing": {
+    "scaler": "StandardScaler",
+    "mean": [
+      111.25437597099948,
+      5.535703584507054,
+      0.3778804119234564
+    ],
+    "scale": [
+      147.71290027122564,
+      0.7918662606050898,
+      5.438390701993586
+    ]
+  },
+  "derived_features": {
+    "precio_por_dia": "precio_limpio / duracion_dias (cuando precio_por_dia es nulo y duracion_dias > 0)",
+    "precio_por_dia_log": "log10(1 + precio_por_dia)",
+    "desviacion_precio_contextual_log": "pre-calculado en el dataset original"
+  },
+  "thresholds": {
+    "critical": 0.5,
+    "high": 0.3,
+    "medium": 0.15
+  },
+  "models": {
+    "svm_rbf": {
+      "file": "svm_rbf.onnx",
+      "metrics": {
+        "accuracy": 0.9911962713619886,
+        "precision": 0.575,
+        "recall": 1.0,
+        "f1": 0.7301587301587301,
+        "auc_roc": 0.9998860632576794
+      }
+    },
+    "mlp": {
+      "file": "mlp.onnx",
+      "metrics": {
+        "accuracy": 0.9963749352667012,
+        "precision": 1.0,
+        "recall": 0.6956521739130435,
+        "f1": 0.8205128205128205,
+        "auc_roc": 0.9993847415914684
+      }
+    }
+  },
+  "training_data": {
+    "records": 9655,
+    "train_size": 7724,
+    "test_size": 1931,
+    "anomaly_rate": 0.012014500258933195
+  }
+}

@@ -5,6 +5,7 @@ import Sidebar, { type ViewKey } from './components/Sidebar';
 import DashboardView from './views/DashboardView';
 import AnalyticsView from './views/AnalyticsView';
 import TopContractsView from './views/TopContractsView';
+import PredictView from './views/PredictView';
 import ReportsView from './views/ReportsView';
 import AboutView from './views/AboutView';
 import ContactView from './views/ContactView';
@@ -25,6 +26,7 @@ const TITLES: Record<ViewKey, string> = {
   dashboard: 'Resumen',
   analytics: 'Análisis profundo',
   top: 'Top contratos',
+  predict: 'Predecir desde CSV',
   reports: 'Reportes y descargas',
   about: 'Acerca de SATCS',
   contact: 'Contacto',
@@ -139,6 +141,8 @@ export default function App() {
         return <AnalyticsView data={filtered.length > 0 ? filtered : data} />;
       case 'top':
         return <TopContractsView top15={top15} />;
+      case 'predict':
+        return <PredictView />;
       case 'reports':
         return <ReportsView />;
       case 'about':

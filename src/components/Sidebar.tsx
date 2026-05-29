@@ -10,12 +10,14 @@ import {
   ChevronRight,
   X,
   ShieldAlert,
+  Sparkles,
 } from 'lucide-react';
 
 export type ViewKey =
   | 'dashboard'
   | 'analytics'
   | 'top'
+  | 'predict'
   | 'reports'
   | 'about'
   | 'contact';
@@ -30,6 +32,7 @@ const MENU: MenuItem[] = [
   { key: 'dashboard', label: 'Resumen', icon: LayoutDashboard },
   { key: 'analytics', label: 'Análisis', icon: BarChart3 },
   { key: 'top', label: 'Top contratos', icon: Trophy },
+  { key: 'predict', label: 'Predecir CSV', icon: Sparkles },
   { key: 'reports', label: 'Reportes', icon: FileDown },
   { key: 'about', label: 'Acerca de', icon: Info },
   { key: 'contact', label: 'Contacto', icon: Mail },
