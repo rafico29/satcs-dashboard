@@ -15,14 +15,17 @@ import type { DetectedFormat, PredictionInput } from './types';
 export const REQUIRED_PREPARED = [
   'precio_limpio',
   'duracion_dias',
-  'desviacion_precio_contextual_log',
 ];
 
 export const COMMON_RAW_SECOP_COLS = [
   'ID del Proceso',
   'Entidad',
-  'Valor del Contrato',
-  'Duración del Contrato (Dias)',
+  'precio_limpio',
+  'duracion_dias',
+  'Modalidad de Contratacion',
+  'Departamento Entidad',
+  'Tipo de Contrato',
+  'fecha_publicacion',
 ];
 
 const ID_COLS_CANDIDATES = [
@@ -38,10 +41,12 @@ const ENTIDAD_COLS = ['Entidad', 'entidad', 'Entidad Contratante', 'entidad_cont
 const DEPTO_COLS = ['Departamento Entidad', 'DEPTO_STD', 'Departamento', 'departamento'];
 const PRECIO_COLS = [
   'precio_limpio',
+  'valor_adjudicado_limpio',
   'precio',
   'Valor del Contrato',
   'Valor Total',
   'valor_contrato',
+  'valor_adjudicado',
 ];
 const DURACION_COLS = [
   'duracion_dias',
@@ -83,6 +88,10 @@ function parseString(value: unknown): string {
 
 /**
  * Detecta el formato del CSV a partir de sus columnas.
+ *
+ * - "prepared": viene con precio_limpio y duracion_dias (ya viene así del SECOP procesado).
+ * - "raw_secop": tiene varias columnas características del SECOP pero sin precio_limpio aún.
+ * - "unknown": cualquier otra cosa.
  */
 export function detectFormat(rows: Record<string, unknown>[]): DetectedFormat {
   if (rows.length === 0) {
@@ -96,25 +105,34 @@ export function detectFormat(rows: Record<string, unknown>[]): DetectedFormat {
   const sample = rows[0];
   const cols = Object.keys(sample);
 
-  // ¿Tiene columnas del formato preparado?
+  // ¿Tiene las columnas críticas del formato preparado?
   const preparedHits = REQUIRED_PREPARED.filter((c) => c in sample);
   const preparedRatio = preparedHits.length / REQUIRED_PREPARED.length;
 
-  // ¿Tiene columnas crudas del SECOP?
+  // ¿Tiene varias columnas del SECOP?
   const rawHits = COMMON_RAW_SECOP_COLS.filter((c) => c in sample);
   const rawRatio = rawHits.length / COMMON_RAW_SECOP_COLS.length;
 
-  if (preparedRatio >= 0.6) {
-    const missing = REQUIRED_PREPARED.filter((c) => !(c in sample));
+  if (preparedRatio === 1 && rawRatio >= 0.5) {
+    // Formato del SECOP "completo": tiene precio_limpio + columnas SECOP
     return {
-      type: 'prepared',
+      type: 'raw_secop',
       foundColumns: cols,
-      missingColumns: missing,
+      missingColumns: [],
       rowCount: rows.length,
     };
   }
-  if (rawRatio >= 0.5) {
-    const missing = COMMON_RAW_SECOP_COLS.filter((c) => !(c in sample));
+  if (preparedRatio === 1) {
+    // Solo las columnas mínimas precalculadas
+    return {
+      type: 'prepared',
+      foundColumns: cols,
+      missingColumns: [],
+      rowCount: rows.length,
+    };
+  }
+  if (rawRatio >= 0.4) {
+    const missing = REQUIRED_PREPARED.filter((c) => !(c in sample));
     return {
       type: 'raw_secop',
       foundColumns: cols,
@@ -125,7 +143,7 @@ export function detectFormat(rows: Record<string, unknown>[]): DetectedFormat {
   return {
     type: 'unknown',
     foundColumns: cols,
-    missingColumns: [...REQUIRED_PREPARED],
+    missingColumns: REQUIRED_PREPARED.filter((c) => !(c in sample)),
     rowCount: rows.length,
   };
 }
@@ -260,54 +278,62 @@ export function rowsToPredictionInputs(
 }
 
 /**
- * Construye una plantilla CSV vacía con headers y dos filas de ejemplo.
- * Solo requiere: ID, valor del contrato y duración. Las demás columnas son
- * opcionales y se calculan automáticamente.
+ * Construye una plantilla CSV con las columnas reales del SECOP.
+ * Columnas críticas: precio_limpio y duracion_dias (las demás son de contexto).
  */
 export function buildCsvTemplate(): string {
   const headers = [
-    'ID del Proceso',
     'Entidad',
+    'Nit Entidad',
     'Departamento Entidad',
+    'Ciudad Entidad',
+    'OrdenEntidad',
+    'Entidad Centralizada',
+    'ID del Proceso',
+    'Nombre del Procedimiento',
+    'Descripción del Procedimiento',
+    'fecha_publicacion',
+    'precio_limpio',
+    'Modalidad de Contratacion',
+    'Justificación Modalidad de Contratación',
+    'duracion_dias',
+    'Estado del Procedimiento',
+    'Nombre del Proveedor Adjudicado',
+    'NIT del Proveedor Adjudicado',
     'Tipo de Contrato',
-    'Valor del Contrato',
-    'Duración del Contrato (Dias)',
   ];
   const rows = [
     [
-      'CO1.REQ.EJEMPLO001',
       'HOSPITAL UNIVERSITARIO DE LA SAMARITANA',
+      '8999990001',
       'Cundinamarca',
-      'Prestación De Servicios',
+      'Bogotá',
+      'Territorial',
+      'Centralizada',
+      'CO1.REQ.EJEMPLO001',
+      'PRESTACIÓN DE SERVICIOS PROFESIONALES EN MEDICINA GENERAL',
+      'Servicios profesionales en consulta externa por el periodo señalado.',
+      '2025-03-12',
       '90000000',
+      'Contratación Régimen Especial',
+      'Regla aplicable',
       '180',
-    ],
-    [
-      'CO1.REQ.EJEMPLO002',
-      'ESE HOSPITAL SAN VICENTE DE PAUL',
-      'Antioquia',
+      'Adjudicado',
+      'JUAN CARLOS PEREZ MEDICO',
+      '1110001111',
       'Prestación De Servicios',
-      '45000000',
-      '180',
-    ],
-    [
-      'CO1.REQ.EJEMPLO003',
-      'SUBRED INTEGRADA DE SERVICIOS DE SALUD CENTRO ORIENTE',
-      'Bogotá D.C.',
-      'Decreto 092 De 2017',
-      '150000000',
-      '365',
     ],
   ];
   const help = [
-    '# Plantilla SATCS — predicción de anomalías en contratos',
+    '# Plantilla SATCS — predicción de anomalías en contratos del SECOP',
     '#',
-    '# Columnas requeridas: ID, Valor del Contrato y Duración del Contrato (Dias)',
-    '# Las demás son opcionales y se utilizan para mostrar contexto al auditor.',
+    '# Columnas requeridas (críticas para el modelo):',
+    '#   - precio_limpio: valor del contrato en pesos colombianos',
+    '#   - duracion_dias: duración del contrato en días',
     '#',
-    '# El sistema calcula automáticamente:',
-    '#   - precio_por_dia = Valor / Duración',
-    '#   - desviación contextual: comparando con la mediana del depto. y tipo de contrato',
+    '# Las demás columnas son opcionales y se utilizan para contexto.',
+    '# El sistema calcula automáticamente la desviación contextual usando',
+    '# la mediana de cada departamento × tipo de contrato del propio CSV.',
     '#',
   ].join('\n');
   return `${help}\n${headers.join(',')}\n${rows.map((r) => r.join(',')).join('\n')}\n`;
