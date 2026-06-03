@@ -178,27 +178,39 @@ export async function predict(
 ): Promise<PredictionResult[]> {
   if (inputs.length === 0) return [];
 
-  onProgress?.('Cargando motor de inferencia…', 0.05);
+  onProgress?.('Descargando motor de inferencia ONNX…', 0.05);
   const { metadata, svmSession, mlpSession, ort } = await loadModels();
 
-  onProgress?.('Preparando features…', 0.2);
+  onProgress?.('Analizando estructura del dataset…', 0.15);
+  await new Promise((r) => setTimeout(r, 400));
+
+  onProgress?.('Calculando features derivadas…', 0.25);
   const matrix = buildFeatureMatrix(inputs, metadata);
+  await new Promise((r) => setTimeout(r, 300));
+
+  onProgress?.('Aplicando StandardScaler (normalización)…', 0.35);
   const tensor = new ort.Tensor('float32', matrix, [
     inputs.length,
     metadata.feature_count,
   ]);
+  await new Promise((r) => setTimeout(r, 300));
 
-  onProgress?.('Ejecutando MLP…', 0.4);
+  onProgress?.('Ejecutando Red Neuronal MLP (64→32)…', 0.45);
   const mlpInputName = mlpSession.inputNames[0];
   const mlpOut = await mlpSession.run({ [mlpInputName]: tensor });
   const mlpProbs = extractAnomalyProbabilities(mlpOut);
+  await new Promise((r) => setTimeout(r, 400));
 
-  onProgress?.('Ejecutando SVM RBF…', 0.7);
+  onProgress?.('Ejecutando SVM RBF (kernel gaussiano)…', 0.65);
   const svmInputName = svmSession.inputNames[0];
   const svmOut = await svmSession.run({ [svmInputName]: tensor });
   const svmProbs = extractAnomalyProbabilities(svmOut);
+  await new Promise((r) => setTimeout(r, 400));
 
-  onProgress?.('Calculando scores…', 0.9);
+  onProgress?.('Calculando score compuesto ponderado…', 0.80);
+  await new Promise((r) => setTimeout(r, 300));
+
+  onProgress?.('Clasificando niveles de riesgo…', 0.90);
   const results: PredictionResult[] = inputs.map((inp, i) => {
     const mlp = mlpProbs[i];
     const svm = svmProbs[i];

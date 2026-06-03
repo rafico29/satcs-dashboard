@@ -115,10 +115,22 @@ export default function PredictView() {
     setRunning(true);
     setError(null);
     setResults(null);
+
+    // Delay visual mínimo de 3.5 segundos para que se sienta el análisis
+    const minDelay = new Promise((r) => setTimeout(r, 3500));
+
     try {
-      const out = await predict(upload.inputs, (stage, pct) =>
-        setProgress({ stage, pct }),
-      );
+      const [out] = await Promise.all([
+        predict(upload.inputs, (stage, pct) =>
+          setProgress({ stage, pct }),
+        ),
+        minDelay,
+      ]);
+
+      // Fase final visual: "Generando reporte..."
+      setProgress({ stage: 'Generando reporte de resultados…', pct: 0.95 });
+      await new Promise((r) => setTimeout(r, 800));
+
       setResults(out);
     } catch (err: any) {
       setError(`Error en la inferencia: ${err.message ?? err}`);
